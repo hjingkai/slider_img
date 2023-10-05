@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    .slider {
+      width: 800px;
+      height: 647px;
+      overflow: hidden;
+    }
+
+    .slider-wrapper {
+      width: 100%;
+      height: 567px;
+    }
+
+    .slider-wrapper img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .slider-footer {
+      height: 80px;
+      background-color: rgb(235, 124, 113);
+      padding: 12px 12px 0 12px;
+      position: relative;
+    }
+
+    .slider-footer .toggle {
+      position: absolute;
+      right: 0;
+      top: 12px;
+      display: flex;
+    }
+
+    .slider-footer .toggle button {
+      margin-right: 12px;
+      width: 28px;
+      height: 28px;
+      appearance: none;
+      border: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .slider-footer .toggle button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .slider-footer p {
+      margin: 0;
+      color: #fff;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .slider-indicator {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .slider-indicator li {
+      width: 8px;
+      height: 8px;
+      margin: 4px;
+      border-radius: 50%;
+      background: #fff;
+      opacity: 0.4;
+      cursor: pointer;
+    }
+
+    .slider-indicator li.active {
+      width: 12px;
+      height: 12px;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="slider">
+    <div class="slider-wrapper">
+      <img src="./images/2022_01.jpg" alt="" />
+    </div>
+    <div class="slider-footer">
+      <p>台灣各地活動</p>
+      <ul class="slider-indicator">
+        <li class="active"></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+      <div class="toggle">
+        <button class="prev">&lt;</button>
+        <button class="next">&gt;</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // 初始化數據
+    const sliderData = [
+      { url: './images/2022_01.jpg', title: '台灣1月各地活動', color: 'rgb(235, 124, 113)' },
+      { url: './images/2022_02.jpg', title: '台灣2月各地活動', color: 'rgb(74, 62, 138)' },
+      { url: './images/2022_03.jpg', title: '台灣3月各地活動', color: 'rgb(145, 221, 217)' },
+      { url: './images/2022_04.jpg', title: '台灣4月各地活動', color: 'rgb(97, 188, 123)' },
+      { url: './images/2022_05.jpg', title: '台灣5月各地活動', color: 'rgb(31, 75, 50)' },
+      { url: './images/2022_06.jpg', title: '台灣6月各地活動', color: 'rgb(65, 192, 203)' },
+      { url: './images/2022_07.jpg', title: '台灣7月各地活動', color: 'rgb(139, 190, 0)' },
+      { url: './images/2022_08.jpg', title: '台灣8月各地活動', color: 'rgb(253, 124, 127)' },
+      { url: './images/2022_09.jpg', title: '台灣9月各地活動', color: 'rgb(8, 43, 97)' },
+      { url: './images/2022_10.jpg', title: '台灣10月各地活動', color: 'rgb(93, 73, 136)' },
+      { url: './images/2022_11.jpg', title: '台灣11月各地活動', color: 'rgb(253, 216, 164)' },
+      { url: './images/2022_12.jpg', title: '台灣12月各地活動', color: 'rgb(63, 101, 122)' }
+    ]
+    // 1.左右按鈕
+    // 1.1獲取右側按鈕
+    const next = document.querySelector('.next')
+    // 獲取圖片元素
+    const img = document.querySelector('.slider-wrapper img')
+    // 獲取footer元素
+    const p = document.querySelector('.slider-footer p')
+    // 獲取footer背景元素
+    const footer = document.querySelector('.slider-footer')
+      // 設定判斷條件的變數
+    let i = 0
+    // 1.2設定點擊事件
+    next.addEventListener('click', function () {
+      // console.log(123);
+
+      // 設定判斷條件
+      i++
+      i = i >= sliderData.length ? 0 : i
+
+      // 1.3取得對應的物件
+      // console.log(sliderData[i]);
+      // 1.4渲染對應的物件
+      // img.src = sliderData[i].url
+      // p.innerHTML = sliderData[i].title
+      // footer.style.backgroundColor = sliderData[i].color
+      // // 1.5更新輪播圖的原點標示
+      // // 先移除原來的類名
+      // document.querySelector('.slider-indicator .active').classList.remove('active')
+      // document.querySelector(`.slider-indicator li:nth-child(${i + 1})`).classList.add('active')
+      
+      // 呼叫渲染函式
+      render()
+    })
+    // 左側按鈕
+    const prev = document.querySelector('.prev')
+    prev.addEventListener('click', function () {
+      i--
+      i = i < 0 ? sliderData.length - 1 : i
+      // 呼叫渲染函式
+      render() 
+    })
+
+    // 2.聲明一個渲染函式進行複用
+    function render() {
+      img.src = sliderData[i].url
+      p.innerHTML = sliderData[i].title
+      footer.style.backgroundColor = sliderData[i].color
+      document.querySelector('.slider-indicator .active').classList.remove('active')
+      document.querySelector(`.slider-indicator li:nth-child(${i + 1})`).classList.add('active')
+    }
+
+    // 3.自動播放模組
+    let timerId = setInterval(() => {
+      // 利用js自動呼叫點擊事件
+      next.click()
+    }, 1000);
+
+    // 4.游標經過輪播圖區塊停止定時器
+    const slider = document.querySelector('.slider')
+    // 設定游標進入事件
+    slider.addEventListener('mouseenter', function () {
+      // 停止定時器
+      clearInterval(timerId)
+    })
+
+    // 5.游標離開輪播圖區塊開啟定時器
+    // 設定游標離開事件
+    slider.addEventListener('mouseleave', function () {
+      // 停止定時器
+      clearInterval(timerId)
+      // 開啟定時器
+      timerId = setInterval(() => {
+        next.click()
+      }, 1000);
+    })
+  </script>
+</body>
+</html>
